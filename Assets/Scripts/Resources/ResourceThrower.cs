@@ -13,14 +13,14 @@ public class ResourceThrower : MonoBehaviour
 
     [SerializeField] private float _throwForce;
 
-    public void ThrowTo(IThrowable throwable, Vector3 objectDirection)
+    public void ThrowTo(IThrowable throwable, Vector3 objectPosition)
     {
-        Vector3 direction = -objectDirection.normalized + new Vector3(
+        Vector3 direction = (transform.position - objectPosition).normalized + new Vector3(
             Random.Range(_minSpreadX, _maxSpreadX),
             Random.Range(_minSpreadY, _maxSpreadY),
             Random.Range(_minSpreadZ, _maxSpreadZ)
-            ) * _throwForce;
+            );
 
-        throwable.GetRigidbody().AddForce(direction, ForceMode.Impulse);
+        throwable.GetRigidbody().AddForce(direction * _throwForce, ForceMode.Impulse);
     }
 }
