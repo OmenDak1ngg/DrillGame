@@ -1,11 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ResourcePlacer : MonoBehaviour
 {
     [SerializeField] private PlacementZone _placementZone;
-
-    float objectSpacing = 0.2f;
+    [SerializeField] float objectSpacing = 0.2f;
 
     public bool CanPlace { get; private set; }
 
@@ -25,8 +23,9 @@ public class ResourcePlacer : MonoBehaviour
         }
         
         CanPlace = true;
-        resource.transform.parent = this.transform;
-        resource.GetComponent<Rigidbody>().isKinematic = true;
+        resource.transform.rotation = Quaternion.identity;
+        resource.transform.SetParent(transform,false);
         resource.transform.position = nextPlacePosition;
+        resource.GetComponent<Rigidbody>().isKinematic = true;
     }
 }

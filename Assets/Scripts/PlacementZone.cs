@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using TMPro.EditorUtilities;
+using UnityEngine;
 
+[RequireComponent (typeof(BoxCollider))]
 public class PlacementZone : MonoBehaviour
 {
+    [SerializeField] private BoxCollider _collider;
+
     private Transform _transform;
 
     private float _halfDivider = 2f;
@@ -9,94 +13,57 @@ public class PlacementZone : MonoBehaviour
     private Vector3 _startPlacePosition;
 
     private void Awake()
-    {
+    { 
+        _collider.isTrigger = true;
         _transform = GetComponent<Transform>();
+        _transform.localScale = Vector3.one;
     }
 
     public bool TryGetNextPosition(float objectSpacing, out Vector3 nextPosition)
     {
+        if (_currentPlacePosition == Vector3.zero)
+            _currentPlacePosition = GetStartPosition(objectSpacing);
+
         nextPosition = Vector3.zero;
+        _currentPlacePosition.x += objectSpacing;
 
-        bool isReachedWidthBound = false;
-        bool isReachedLengthBound = false;
-        bool isReachedHeightBound = false;
+        Vector3 min = _collider.center - _collider.size / _halfDivider;
+        Vector3 max = _collider.center + _collider.size / _halfDivider;
 
-        float newPositionX = _currentPlacePosition.x + objectSpacing;
-        float newPositionY = _currentPlacePosition.y;
-        float newPositionZ = _currentPlacePosition.z;
-
-        if (IsInWidthBounds(newPositionX) == false)
+        if (_currentPlacePosition.x > max.x)
         {
-            newPositionX = _startPlacePosition.x;
-            isReachedWidthBound = true;
+            _currentPlacePosition.x = min.x;
+            _currentPlacePosition.z += objectSpacing;
         }
 
-        if (isReachedWidthBound)
-            newPositionZ += objectSpacing;
-
-        if (IsInLengthBounds(newPositionZ) == false)
+        if (_currentPlacePosition.z > max.z)
         {
-            newPositionZ = _startPlacePosition.z;
-            isReachedLengthBound = true;
+            _currentPlacePosition.z = min.z;
+            _currentPlacePosition.y += objectSpacing;
         }
 
-        if (isReachedLengthBound && isReachedWidthBound)
-            newPositionY += objectSpacing;
-
-        if (IsInHeightBounds(newPositionY) == false)
-            isReachedHeightBound = true;
-
-        if (isReachedWidthBound && isReachedLengthBound && isReachedHeightBound)
+        if (_currentPlacePosition.y > max.y)
             return false;
 
-        _currentPlacePosition = (new Vector3(newPositionX, newPositionY, newPositionZ));
-        nextPosition = _currentPlacePosition;
+        nextPosition = transform.TransformPoint(_currentPlacePosition);
 
         return true;
     }
 
-    public Vector3 GetStartPosition(float sizeOfPlacementObject)
+    public Vector3 GetStartPosition(float objectSpacing)
     {
-        _startPlacePosition = _transform.position - new Vector3(_transform.localScale.x,
-            _transform.localScale.y,
-            _transform.localScale.z) / _halfDivider
-            + new Vector3(sizeOfPlacementObject, sizeOfPlacementObject, sizeOfPlacementObject) / _halfDivider;
-
-        _currentPlacePosition = _startPlacePosition;
-
+        Vector3 min = _collider.center - _collider.size / _halfDivider;
+        min.x -= objectSpacing;
+        _startPlacePosition = min;
         return _startPlacePosition;
-    }
-
-    private bool IsInWidthBounds(float value)
-    {
-        float minWidthBound = _transform.position.x - _transform.transform.localScale.x / _halfDivider;
-        float maxWidthBound = minWidthBound + _transform.localScale.x;
-
-        return value <= maxWidthBound && value >= minWidthBound;
-    }
-
-    private bool IsInLengthBounds(float value)
-    {
-        float minLengthBound = _transform.position.z - _transform.localScale.z / _halfDivider;
-        float maxLengthBound = minLengthBound + _transform.localScale.z;
-
-        return value <= maxLengthBound && value >= minLengthBound;
-    }
-
-    private bool IsInHeightBounds(float value)
-    {
-        float minHeightBound = _transform.position.y - _transform.transform.localScale.y / _halfDivider;
-        float maxHeightBound = minHeightBound + _transform.localScale.y;
-
-        return value <= maxHeightBound && value >= minHeightBound;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, new Vector3(
-                        transform.localScale.x,
-                        transform.localScale.y,
-                        transform.localScale.z));
+                        _collider.bounds.size.x,
+                        _collider.bounds.size.y,
+                        _collider.bounds.size.z));
     }
 }
