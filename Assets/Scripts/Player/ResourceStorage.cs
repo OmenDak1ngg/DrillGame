@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
 public class ResourceStorage : MonoBehaviour
 {
     [SerializeField] private int _maxAmount = 20;
-    [SerializeField] private ResourcePlacer _placer;
 
     private int _amount;
+
+    public int Amount => _amount;
+
+    public event Action<Resource> Collected;
+    public event Action Decreased;
 
     private void Awake()
     {
@@ -21,9 +26,8 @@ public class ResourceStorage : MonoBehaviour
             if (_amount >= _maxAmount)
                 return;
 
+            Collected?.Invoke(resource);
             _amount++;
-            _placer.TryPlace(resource);
-            //resource.InvokeCollected();
         }
     }
 
@@ -33,5 +37,6 @@ public class ResourceStorage : MonoBehaviour
             return;
 
         _amount -= amount;
+        Decreased?.Invoke();
     }
 }

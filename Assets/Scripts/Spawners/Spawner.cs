@@ -16,6 +16,11 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour, ISpawnable
             actionOnDestroy:(pooledObject) => OnDestroyObject(pooledObject));
     }
 
+    public virtual void Release(T pooledObject)
+    {
+        _pool.Release(pooledObject);
+    }
+
     protected virtual T OnCreate()
     {
         T newObject = Instantiate(Prefab);
@@ -39,12 +44,7 @@ public class Spawner<T> : MonoBehaviour where T : MonoBehaviour, ISpawnable
         Destroy(pooledObject);
     }
 
-    protected virtual void Release(T pooledObject)
-    {
-        _pool.Release(pooledObject);
-    }
-
-    protected virtual void Get()
+    public virtual void Get()
     {
         _pool.Get();
     }

@@ -1,40 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class OreTracker : MonoBehaviour
 {
+    [SerializeField] private Drill _playerDrill;
+    [SerializeField] private OreSpawner _oreSpawner;
+    [SerializeField] private ResourceSpawner _resourceSpawner;
+
     private List<Ore> _ores;
 
-    private bool _canSubscribe => _ores != null;
+    private void OnEnable()
+    {
+        _playerDrill.Drilled += OnDrilled;
+    }
+
+
+    private void OnDisable()
+    {
+        _playerDrill.Drilled -= OnDrilled;
+    }
 
     private void Awake()
     {
         _ores = new List<Ore>();
     }
 
-    public void InitElement(Ore ore, Action<Ore> action)
+    private void OnDrilled(Ore ore)
     {
-        ore.Drilled += action;
+        _oreSpawner.Release(ore);
+        _resourceSpawner.Get();
+        _resourceSpawner.SetSpawnpoint(ore.transform.position);
+    }
+
+    public void InitElement(Ore ore)
+    {
         _ores.Add(ore);
-    }
-
-    public void SubscribeElements(Action<Ore> action)
-    {
-        if (_canSubscribe == false)
-            return;
-
-        foreach (Ore ore in _ores)
-        {
-            ore.Drilled += action;
-        }
-    }
-
-    public void UnSubscribeElements(Action<Ore> action)
-    {
-        foreach (Ore ore in _ores)
-        {
-            ore.Drilled -= action;
-        }
     }
 }

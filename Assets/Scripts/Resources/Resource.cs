@@ -1,12 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Resource : MonoBehaviour, IThrowable, ISpawnable
 {
     private Rigidbody _rigidbody;
-
-    public event Action<Resource> Collected;
 
     private void Awake()
     {
@@ -16,10 +13,5 @@ public class Resource : MonoBehaviour, IThrowable, ISpawnable
     public Rigidbody GetRigidbody()
     {
         return _rigidbody;
-    }
-
-    public void InvokeCollected()
-    {
-        Collected?.Invoke(this);
     }
 }

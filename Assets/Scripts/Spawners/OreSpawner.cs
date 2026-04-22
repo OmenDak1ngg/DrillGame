@@ -11,16 +11,6 @@ public class OreSpawner : Spawner<Ore>
     private float _oreSize;
     private Vector3 _SpawnPosition;
 
-    private void OnEnable()
-    {
-        _oreTracker.SubscribeElements(Release);
-    }
-
-    private void OnDisable()
-    {
-        _oreTracker.UnSubscribeElements(Release);
-    }
-
     protected override void Awake()
     {
         base.Awake();
@@ -43,7 +33,7 @@ public class OreSpawner : Spawner<Ore>
     protected override Ore OnCreate()
     {
         Ore ore = base.OnCreate();
-        _oreTracker.InitElement(ore, Release);
+        _oreTracker.InitElement(ore);
 
         return ore;
     }
