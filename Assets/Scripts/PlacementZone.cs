@@ -1,4 +1,5 @@
-﻿using TMPro.EditorUtilities;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(BoxCollider))]
@@ -12,8 +13,11 @@ public class PlacementZone : MonoBehaviour
     private Vector3 _currentPlacePosition;
     private Vector3 _startPlacePosition;
 
+    private Stack<Vector3> _previouPpositions;
+
     private void Awake()
-    { 
+    {
+        _previouPpositions = new Stack<Vector3>();
         _collider.isTrigger = true;
         _transform = GetComponent<Transform>();
         _transform.localScale = Vector3.one;
@@ -21,6 +25,8 @@ public class PlacementZone : MonoBehaviour
 
     public bool TryGetNextPosition(float objectSpacing, out Vector3 nextPosition)
     {
+        _previouPpositions.Push(_currentPlacePosition);
+        
         if (_currentPlacePosition == Vector3.zero)
             _currentPlacePosition = GetStartPosition(objectSpacing);
 
@@ -55,7 +61,13 @@ public class PlacementZone : MonoBehaviour
         Vector3 min = _collider.center - _collider.size / _halfDivider;
         min.x -= objectSpacing;
         _startPlacePosition = min;
+
         return _startPlacePosition;
+    }
+
+    protected void SetPreviousCurrentPosition()
+    {
+        _currentPlacePosition = _previouPpositions.Pop();
     }
 
     private void OnDrawGizmos()
