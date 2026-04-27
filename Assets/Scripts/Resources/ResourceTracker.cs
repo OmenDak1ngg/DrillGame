@@ -8,12 +8,7 @@ public class ResourceTracker : MonoBehaviour
     [SerializeField] private ResourceSpawner _resourceSpawner;
     [SerializeField] private ResourcePlacer _resourcePlacer;
 
-    private Stack<Resource> _resources;
-
-    private void Awake()
-    {
-        _resources = new Stack<Resource>();
-    }
+    private Stack<Resource> _resources = new Stack<Resource>();
 
     private void OnEnable()
     {
@@ -30,12 +25,16 @@ public class ResourceTracker : MonoBehaviour
 
     private void OnStorageDecrease()
     {
-        _resourceSpawner.Release(_resources.Pop());
+        _resources.Pop().gameObject.SetActive(false);
     }
 
     private void OnResourceCollected(Resource resource)
     {
         _resourcePlacer.TryPlace(resource);
+
+        if (_resourcePlacer.CanPlace == false)
+            return;
+
         _resources.Push(resource);
     }
 }

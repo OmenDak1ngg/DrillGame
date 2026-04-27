@@ -9,7 +9,7 @@ public class OreTracker : MonoBehaviour
     [SerializeField] private OreSpawner _oreSpawner;
     [SerializeField] private ResourceSpawner _resourceSpawner;
 
-    private List<Ore> _ores;
+    private List<Ore> _ores = new List<Ore>();
 
     private void OnEnable()
     {
@@ -22,14 +22,9 @@ public class OreTracker : MonoBehaviour
         _playerDrill.Drilled -= OnDrilled;
     }
 
-    private void Awake()
-    {
-        _ores = new List<Ore>();
-    }
-
     private void OnDrilled(Ore ore)
     {
-        _oreSpawner.Release(ore);
+        ore.gameObject.SetActive(false);
         _resourceSpawner.Get();
         _resourceSpawner.SetSpawnpoint(ore.transform.position);
     }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Resource : MonoBehaviour, IThrowable, ISpawnable
+public class Resource : MonoBehaviour, IThrowable
 {
     private Rigidbody _rigidbody;
 

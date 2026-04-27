@@ -13,11 +13,10 @@ public class PlacementZone : MonoBehaviour
     private Vector3 _currentPlacePosition;
     private Vector3 _startPlacePosition;
 
-    private Stack<Vector3> _previouPpositions;
+    private Stack<Vector3> _previousPositions = new Stack<Vector3>();
 
     private void Awake()
     {
-        _previouPpositions = new Stack<Vector3>();
         _collider.isTrigger = true;
         _transform = GetComponent<Transform>();
         _transform.localScale = Vector3.one;
@@ -25,7 +24,7 @@ public class PlacementZone : MonoBehaviour
 
     public bool TryGetNextPosition(float objectSpacing, out Vector3 nextPosition)
     {
-        _previouPpositions.Push(_currentPlacePosition);
+        _previousPositions.Push(_currentPlacePosition);
         
         if (_currentPlacePosition == Vector3.zero)
             _currentPlacePosition = GetStartPosition(objectSpacing);
@@ -67,7 +66,7 @@ public class PlacementZone : MonoBehaviour
 
     protected void SetPreviousCurrentPosition()
     {
-        _currentPlacePosition = _previouPpositions.Pop();
+        _currentPlacePosition = _previousPositions.Pop();
     }
 
     private void OnDrawGizmos()

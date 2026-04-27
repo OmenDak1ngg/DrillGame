@@ -1,22 +1,16 @@
 ﻿using UnityEngine;
 
-public class OreSpawner : Spawner<Ore>
+public class OreSpawner : SpawnerTest<Ore>
 {
     [SerializeField] private PlacementZone _placementZone;
-    [SerializeField] private float _spaceBetweenObjects = 0.2f;
+    [SerializeField] private float _objectSpacing = 0.7f;
     [SerializeField] private OreTracker _oreTracker;
 
-    private float _objectSpacing;
-
-    private float _oreSize;
     private Vector3 _SpawnPosition;
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         _SpawnPosition = Vector3.zero;
-        _oreSize = Prefab.GetSize();
-        _objectSpacing = _spaceBetweenObjects + _oreSize;
     }
 
     private void Start()
@@ -40,7 +34,7 @@ public class OreSpawner : Spawner<Ore>
 
     private void StartSpawn()
     {
-        _SpawnPosition = _placementZone.GetStartPosition(_oreSize);
+        _SpawnPosition = _placementZone.GetStartPosition(1f);
         Get();
 
         while (_placementZone.TryGetNextPosition(_objectSpacing, out _SpawnPosition))

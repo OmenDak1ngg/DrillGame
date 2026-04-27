@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Pool;
+using System.Linq;
 
-public class Spawner<T> : MonoBehaviour where T : MonoBehaviour, ISpawnable
+public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField] protected T Prefab;
 
     private ObjectPool<T> _pool;
+
+    private List<T> _objects = new List<T>();
 
     protected virtual void Awake()
     {
