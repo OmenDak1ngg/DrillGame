@@ -1,55 +1,33 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Pool;
+﻿using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
-public class Spawner<T> : MonoBehaviour where T : MonoBehaviour
+public  class Spawner<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField] protected T Prefab;
 
-    private ObjectPool<T> _pool;
-
     private List<T> _objects = new List<T>();
 
-    protected virtual void Awake()
+    protected virtual void OnGet(T obj)
     {
-        _pool = new ObjectPool<T>(
-            createFunc:() => OnCreate(),
-            actionOnGet:(pooledObject) => OnGet(pooledObject),
-            actionOnRelease:(pooledObject) => OnRelease(pooledObject),
-            actionOnDestroy:(pooledObject) => OnDestroyObject(pooledObject));
-    }
-
-    public virtual void Release(T pooledObject)
-    {
-        _pool.Release(pooledObject);
+        obj.gameObject.SetActive(true);
+        obj.transform.parent = this.transform;
     }
 
     protected virtual T OnCreate()
     {
         T newObject = Instantiate(Prefab);
-        newObject.transform.parent = this.transform;
 
-        return newObject; 
+        return newObject;
     }
 
-    protected virtual void OnGet(T pooledObject)
+    public void Get()
     {
-        pooledObject.gameObject.SetActive(true);
-    }
+        T newObject = _objects.FirstOrDefault(obj => obj.isActiveAndEnabled == false);
 
-    protected virtual void OnRelease(T pooledObject)
-    {
-        pooledObject.gameObject.SetActive(false);
-    }
+        if(newObject == null)
+            newObject = OnCreate();
 
-    protected virtual void OnDestroyObject(T pooledObject)
-    {
-        Destroy(pooledObject);
-    }
-
-    public virtual void Get()
-    {
-        _pool.Get();
+        OnGet(newObject);
     }
 }

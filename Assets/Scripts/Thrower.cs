@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ResourceThrower : MonoBehaviour
+public class Thrower : MonoBehaviour
 {
     [SerializeField, Range(-10, 10)] private float _minSpreadX;
     [SerializeField, Range(-10, 10)] private float _maxSpreadX;
@@ -13,14 +13,16 @@ public class ResourceThrower : MonoBehaviour
 
     [SerializeField] private float _throwForce;
 
-    public void ThrowTo(IThrowable throwable, Vector3 objectPosition)
+    public void ThrowTo(Ore ore, Vector3 objectPosition)
     {
+        ore.Rigidbody.isKinematic = false;
+
         Vector3 direction = (transform.position - objectPosition).normalized + new Vector3(
             Random.Range(_minSpreadX, _maxSpreadX),
             Random.Range(_minSpreadY, _maxSpreadY),
             Random.Range(_minSpreadZ, _maxSpreadZ)
             );
 
-        throwable.GetRigidbody().AddForce(direction * _throwForce, ForceMode.Impulse);
+        ore.Rigidbody.AddForce(direction * _throwForce, ForceMode.Impulse);
     }
 }

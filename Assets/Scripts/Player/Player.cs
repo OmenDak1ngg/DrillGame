@@ -4,10 +4,10 @@
 [RequireComponent(typeof(Wallet))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private ResourceStorage _resourceStorage;
+    [SerializeField] private OreStorage _resourceStorage;
 
     public Wallet Wallet { get; private set; }
-    public ResourceStorage ResourceStorage => _resourceStorage;
+    public OreStorage ResourceStorage => _resourceStorage;
 
     private void Awake()
     {

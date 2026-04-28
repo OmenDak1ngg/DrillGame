@@ -2,15 +2,13 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class ResourceStorage : MonoBehaviour
+public class OreStorage : MonoBehaviour
 {
-    [SerializeField] private int _maxAmount = 20;
-
     private int _amount;
 
     public int Amount => _amount;
 
-    public event Action<Resource> Collected;
+    public event Action<Ore> Collected;
     public event Action Decreased;
 
     private void Awake()
@@ -21,11 +19,8 @@ public class ResourceStorage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<Resource>(out Resource resource))
+        if(other.TryGetComponent<Ore>(out Ore resource))
         {
-            if (_amount >= _maxAmount)
-                return;
-
             Collected?.Invoke(resource);
             _amount++;
         }

@@ -1,36 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class OreTracker : MonoBehaviour
 {
-    [SerializeField] private Drill _playerDrill;
-    [SerializeField] private OreSpawner _oreSpawner;
-    [SerializeField] private ResourceSpawner _resourceSpawner;
-
-    private List<Ore> _ores = new List<Ore>();
-
-    private void OnEnable()
+    private List<Ore> _undrilledOres = new List<Ore>();
+    private Stack<Ore> _drilledOres = new Stack<Ore>();
+     
+    public void RemoveFromDrilled(Ore ore)
     {
-        _playerDrill.Drilled += OnDrilled;
+        _undrilledOres.Remove(ore);
     }
 
-
-    private void OnDisable()
+    public Ore PopFromDrilled()
     {
-        _playerDrill.Drilled -= OnDrilled;
+        return _drilledOres.Pop();
     }
 
-    private void OnDrilled(Ore ore)
+    public void PushToDrilled(Ore ore)
     {
-        ore.gameObject.SetActive(false);
-        _resourceSpawner.Get();
-        _resourceSpawner.SetSpawnpoint(ore.transform.position);
+        _drilledOres.Push(ore);
     }
 
-    public void InitElement(Ore ore)
+    public void AddToUndrilled(Ore ore)
     {
-        _ores.Add(ore);
+        _undrilledOres.Add(ore);
+    }
+
+    public bool IsDrilled(Ore ore)
+    {
+        return _drilledOres.Contains(ore);
     }
 }

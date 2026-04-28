@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2190456152272912575}
   - component: {fileID: 5776558358200762065}
   - component: {fileID: 7359910175371122812}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 381163291207066651}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 20
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

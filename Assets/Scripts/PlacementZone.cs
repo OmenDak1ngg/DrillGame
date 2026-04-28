@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(BoxCollider))]
@@ -64,8 +63,11 @@ public class PlacementZone : MonoBehaviour
         return _startPlacePosition;
     }
 
-    protected void SetPreviousCurrentPosition()
+    public void SetPreviousCurrentPosition()
     {
+        if (_previousPositions.Count == 0)
+            return;
+
         _currentPlacePosition = _previousPositions.Pop();
     }
 

@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class OreSpawner : SpawnerTest<Ore>
+public class OreSpawner : Spawner<Ore>
 {
     [SerializeField] private PlacementZone _placementZone;
-    [SerializeField] private float _objectSpacing = 0.7f;
-    [SerializeField] private OreTracker _oreTracker;
+    [SerializeField] private float _objectSpacing;
 
     private Vector3 _SpawnPosition;
+
+    public event Action<Ore> Created;
 
     protected void Awake()
     {
@@ -20,6 +22,8 @@ public class OreSpawner : SpawnerTest<Ore>
 
     protected override void OnGet(Ore pooledObject)
     {
+        pooledObject.Collider.isTrigger = true;
+        pooledObject.Rigidbody.isKinematic = true;
         pooledObject.transform.position = _SpawnPosition;
         base.OnGet(pooledObject);
     }
@@ -27,7 +31,7 @@ public class OreSpawner : SpawnerTest<Ore>
     protected override Ore OnCreate()
     {
         Ore ore = base.OnCreate();
-        _oreTracker.InitElement(ore);
+        Created?.Invoke(ore);
 
         return ore;
     }
