@@ -14,7 +14,6 @@ public class ScoreStar : MonoBehaviour
     {
         _image = GetComponent<Image>();
         RectTransform = GetComponent<RectTransform>();
-        RectTransform.position = Vector3.zero;
         SetColor(_inactiveColor);
     }
 

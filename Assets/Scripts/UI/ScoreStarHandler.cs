@@ -15,23 +15,24 @@ public class ScoreStarHandler : MonoBehaviour
     {
         if (_stars.Count != _levelHandler.ScoreGoals.Count)
             throw new ArgumentOutOfRangeException();
+    }
 
-        for(int i = 0; i < _stars.Count; i++)
+    private void Start()
+    {
+        for (int i = 0; i < _stars.Count; i++)
         {
             SetStarPosition(_stars[i], _levelHandler.ScoreGoals[i]);
         }
     }
 
-    private void SetStarPosition(ScoreStar star, int ScoreByStar)
+    private void SetStarPosition(ScoreStar star, int scoreByStar)
     {
         int halfDivider = 2;
-        float sliderLeftBoundX = -_scoreSlider.GetComponent<RectTransform>().rect.x / halfDivider;
+        float sliderLeftBoundX = -_scoreSlider.GetComponent<RectTransform>().rect.width / halfDivider;
 
-        Vector3 newStarPosition = new Vector3(ExtensionMethods.Remap(star.RectTransform.position.x, 0, _levelHandler.MaxScore
+        Vector3 newStarPosition = new Vector3(ExtensionMethods.Remap(scoreByStar, 0, _levelHandler.MaxScore
             , sliderLeftBoundX, -sliderLeftBoundX),0,0);
 
-        Debug.Log(newStarPosition);
-
-        star.RectTransform.position = newStarPosition;
+        star.RectTransform.anchoredPosition = newStarPosition;
     }
 }
