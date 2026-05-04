@@ -6,9 +6,9 @@ public class ResourceReceiver : MonoBehaviour
 {
     [SerializeField] private int _resourceCost = 3;
     [SerializeField] private float _decreasingDelay = 0.5f;
-    [SerializeField] private int _resourceDecreaseByDelay = 1;
 
     [SerializeField] private ReceiverZone _receiverZone;
+    [SerializeField] private OreTracker _oreTracker;
 
     private WaitForSeconds _decreasingWait;
     private Coroutine _coroutine;
@@ -44,11 +44,14 @@ public class ResourceReceiver : MonoBehaviour
     {
         while (enabled)
         {
-            if (player.ResourceStorage.Amount >= _resourceDecreaseByDelay)
+            if (_oreTracker.IsHasCollectedOres() == false)
             {
-                player.ResourceStorage.TryDecreaseAmount(_resourceDecreaseByDelay);
-                player.Wallet.IncreaseAmount(_resourceCost);
+                StopCoroutine(_coroutine);
             }
+
+            _oreTracker.PopFromCollected();
+            player.ResourceStorage.TryDecreaseAmount();
+            player.Wallet.IncreaseAmount(_resourceCost);
 
             yield return _decreasingWait;
         }

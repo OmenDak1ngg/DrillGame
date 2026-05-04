@@ -4,17 +4,14 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class OreStorage : MonoBehaviour
 {
-    private int _amount;
-
-    public int Amount => _amount;
-
+    [SerializeField] private PlacementZone _placementZone;
+    
     public event Action<Ore> Collected;
     public event Action Decreased;
 
     private void Awake()
     {
         GetComponent<BoxCollider>().isTrigger = true;   
-        _amount = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,16 +19,12 @@ public class OreStorage : MonoBehaviour
         if(other.TryGetComponent<Ore>(out Ore resource))
         {
             Collected?.Invoke(resource);
-            _amount++;
         }
     }
 
-    public void TryDecreaseAmount(int amount)
+    public void TryDecreaseAmount()
     {
-        if(_amount - amount < 0)
-            return;
-
-        _amount -= amount;
+        _placementZone.SetPreviousCurrentPosition();
         Decreased?.Invoke();
     }
 }

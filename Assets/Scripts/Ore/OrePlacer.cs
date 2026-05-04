@@ -1,11 +1,36 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class OrePlacer : MonoBehaviour
 {
     [SerializeField] private PlacementZone _placementZone;
     [SerializeField] float objectSpacing = 0.2f;
 
-    public bool TryPlace(Ore ore)
+    [SerializeField] private OreStorage _storage;
+    [SerializeField] private OreTracker _tracker;
+
+    private void OnEnable()
+    {
+        _storage.Collected += OnOreCollected;
+    }
+
+    private void OnDisable()
+    {
+        _storage.Collected -= OnOreCollected;
+    }
+
+    private void OnOreCollected(Ore ore)
+    {
+        if (_tracker.IsDrilled(ore) == false)
+            return;
+
+        if(TryPlace(ore) == false)
+            return;
+
+        _tracker.AddToCollected(ore);
+    }
+
+    private bool TryPlace(Ore ore)
     {
         Vector3 nextPlacePosition = Vector3.zero;
 
