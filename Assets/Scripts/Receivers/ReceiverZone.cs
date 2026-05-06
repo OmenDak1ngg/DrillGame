@@ -6,6 +6,8 @@ public class ReceiverZone : MonoBehaviour
 {
     private BoxCollider _collider;
 
+    private bool _isPlayerEntered;
+
     public event Action<Player> PlayerEntered;
     public event Action PlayerExited;
 
@@ -18,12 +20,24 @@ public class ReceiverZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent<Player>(out Player player))
+        {
+            if (_isPlayerEntered)
+                return;
+
+            _isPlayerEntered = true;
             PlayerEntered?.Invoke(player);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.TryGetComponent<Player>(out _)) 
+        if (other.TryGetComponent<Player>(out _))
+        {
+            if (_isPlayerEntered == false)
+                return;
+
+            _isPlayerEntered = false;
             PlayerExited?.Invoke();
+        }
     }
 }

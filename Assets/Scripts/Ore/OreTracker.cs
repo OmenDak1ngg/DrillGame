@@ -14,6 +14,8 @@ public class OreTracker : MonoBehaviour
     private Stack<Ore> _drilledOres = new Stack<Ore>();
     private Stack<Ore> _collectedOres = new Stack<Ore>();
 
+    public event Action<int> CountUpdated;
+
     private void OnEnable()
     {
         _drill.Drilled += OnDrilled;
@@ -35,10 +37,13 @@ public class OreTracker : MonoBehaviour
 
     private void OnDecreased()
     {
-        if (_drilledOres.Count == 0)
+        if (_collectedOres.Count == 0)
             return;
 
-        _drilledOres.Pop().gameObject.SetActive(false);
+        Ore decreasedOre = _collectedOres.Pop();
+        CountUpdated?.Invoke(_collectedOres.Count);
+        decreasedOre.gameObject.SetActive(false);
+        decreasedOre.transform.SetParent(null);
     }
 
     private void OnDrilled(Ore ore)
@@ -65,15 +70,11 @@ public class OreTracker : MonoBehaviour
     public void AddToCollected(Ore ore)
     {
         _collectedOres.Push(ore);
+        CountUpdated?.Invoke(_collectedOres.Count);
     }
 
-    public void PopFromCollected()
+    public bool HasCollectedOres()
     {
-        _collectedOres.Pop();
-    }
-
-    public bool IsHasCollectedOres()
-    {
-        return _collectedOres.Count != 0;
+        return _collectedOres.Count > 0;
     }
 }

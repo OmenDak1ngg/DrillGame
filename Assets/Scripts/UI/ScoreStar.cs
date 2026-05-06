@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Drawing;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreStar : MonoBehaviour
 {
-    [SerializeField] private Vector3 _inactiveColor = new Vector3(80,80,80);
-    [SerializeField] private Vector3 _activeColor = new Vector3(255,255,255); 
+    [SerializeField] private Color32 _inactiveColor = new Color32(80,80,80,255);
+    [SerializeField] private Color32 _activeColor = new Color32(255,255,255, 255); 
     
     private Image _image;
 
@@ -14,16 +15,11 @@ public class ScoreStar : MonoBehaviour
     {
         _image = GetComponent<Image>();
         RectTransform = GetComponent<RectTransform>();
-        SetColor(_inactiveColor);
+        _image.color = _inactiveColor;
     }
 
     public void SetActive()
     {
-        SetColor(_activeColor);
-    }
-
-    private void SetColor(Vector3 color)
-    {
-        _image.color = new Color(color.x, color.y, color.z);
+        _image.color = _activeColor;
     }
 }

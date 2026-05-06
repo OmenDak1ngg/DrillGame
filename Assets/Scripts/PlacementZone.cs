@@ -23,11 +23,11 @@ public class PlacementZone : MonoBehaviour
 
     public bool TryGetNextPosition(float objectSpacing, out Vector3 nextPosition)
     {
-        _previousPositions.Push(_currentPlacePosition);
-        
         if (_currentPlacePosition == Vector3.zero)
             _currentPlacePosition = GetStartPosition(objectSpacing);
 
+        _previousPositions.Push(_currentPlacePosition);
+        
         nextPosition = Vector3.zero;
         _currentPlacePosition.x += objectSpacing;
 

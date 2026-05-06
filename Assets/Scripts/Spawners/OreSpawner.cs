@@ -25,6 +25,7 @@ public class OreSpawner : Spawner<Ore>
         pooledObject.Collider.isTrigger = true;
         pooledObject.Rigidbody.isKinematic = true;
         pooledObject.transform.position = _SpawnPosition;
+        pooledObject.transform.SetParent(this.transform);
         base.OnGet(pooledObject);
     }
 

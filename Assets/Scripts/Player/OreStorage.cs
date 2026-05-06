@@ -24,7 +24,7 @@ public class OreStorage : MonoBehaviour
 
     public void TryDecreaseAmount()
     {
-        _placementZone.SetPreviousCurrentPosition();
         Decreased?.Invoke();
+        _placementZone.SetPreviousCurrentPosition();
     }
 }

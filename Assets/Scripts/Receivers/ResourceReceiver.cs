@@ -32,6 +32,9 @@ public class ResourceReceiver : MonoBehaviour
 
     private void StopDecreasingResource()
     {
+        if (_coroutine == null)
+            return;
+
         StopCoroutine(_coroutine);
     }
 
@@ -44,13 +47,13 @@ public class ResourceReceiver : MonoBehaviour
     {
         while (enabled)
         {
-            if (_oreTracker.IsHasCollectedOres() == false)
+            if (_oreTracker.HasCollectedOres() == false)
             {
                 StopCoroutine(_coroutine);
+                yield break;
             }
 
-            _oreTracker.PopFromCollected();
-            player.ResourceStorage.TryDecreaseAmount();
+            player.OreStorage.TryDecreaseAmount();
             player.Wallet.IncreaseAmount(_resourceCost);
 
             yield return _decreasingWait;

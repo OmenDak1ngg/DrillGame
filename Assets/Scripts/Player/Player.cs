@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private OreStorage _resourceStorage;
 
     public Wallet Wallet { get; private set; }
-    public OreStorage ResourceStorage => _resourceStorage;
+    public OreStorage OreStorage => _resourceStorage;
 
     private void Awake()
     {
