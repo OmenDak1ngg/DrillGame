@@ -12,7 +12,7 @@ public class LevelCompletionHandler : MonoBehaviour
     public List<int> ScoreGoals => _scoreGoals;
 
     public event Action<int> ReachedScore;
-    public event Action ReachedMaxScore;
+    public event Action ReachedAnyGoal;
 
     private void Awake()
     {
@@ -31,9 +31,17 @@ public class LevelCompletionHandler : MonoBehaviour
 
     private void OnWalletUpdate(int value)
     {
-        if (value >= MaxScore)
-            ReachedMaxScore?.Invoke();
-
         ReachedScore.Invoke(value);
+        
+        foreach(int  score in _scoreGoals)
+        {
+            if(value >= score)
+            {
+                ReachedAnyGoal?.Invoke();
+                
+                return;
+            }
+        }
+
     }
 }

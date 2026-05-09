@@ -5,6 +5,8 @@ public class Wallet : MonoBehaviour
 {
     private int _amount;
 
+    public int Amount => _amount;
+
     public event Action<int> Changed;
 
     public void IncreaseAmount(int value)

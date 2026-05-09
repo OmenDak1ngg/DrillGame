@@ -40,6 +40,9 @@ public class PlayerMover : MonoBehaviour
 
     private void Move(float direction)
     {
+        if (direction < 0)
+            direction = 0;
+
         Vector3 worldDirection = new Vector3(0, 0, direction);
         Vector3 localDirection = _transform.TransformDirection(worldDirection);
 

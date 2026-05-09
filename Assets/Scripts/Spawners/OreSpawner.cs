@@ -6,13 +6,13 @@ public class OreSpawner : Spawner<Ore>
     [SerializeField] private PlacementZone _placementZone;
     [SerializeField] private float _objectSpacing;
 
-    private Vector3 _SpawnPosition;
+    private Vector3 _spawnPosition;
 
     public event Action<Ore> Created;
 
     protected void Awake()
     {
-        _SpawnPosition = Vector3.zero;
+        _spawnPosition = Vector3.zero;
     }
 
     private void Start()
@@ -24,7 +24,7 @@ public class OreSpawner : Spawner<Ore>
     {
         pooledObject.Collider.isTrigger = true;
         pooledObject.Rigidbody.isKinematic = true;
-        pooledObject.transform.position = _SpawnPosition;
+        pooledObject.transform.position = _spawnPosition;
         pooledObject.transform.SetParent(this.transform);
         base.OnGet(pooledObject);
     }
@@ -39,10 +39,7 @@ public class OreSpawner : Spawner<Ore>
 
     private void StartSpawn()
     {
-        _SpawnPosition = _placementZone.GetStartPosition(1f);
-        Get();
-
-        while (_placementZone.TryGetNextPosition(_objectSpacing, out _SpawnPosition))
+        while (_placementZone.TryGetNextPosition(_objectSpacing, out _spawnPosition))
         {
             Get();
         }

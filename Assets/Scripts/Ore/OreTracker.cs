@@ -7,10 +7,8 @@ public class OreTracker : MonoBehaviour
     [SerializeField] private Drill _drill;
     [SerializeField] private OreRendererChanger _rendererChanger;
     [SerializeField] private Thrower _thrower;
-    [SerializeField] private OreSpawner _spawner;
     [SerializeField] private OreStorage _oreStorage;
 
-    private List<Ore> _undrilledOres = new List<Ore>();
     private Stack<Ore> _drilledOres = new Stack<Ore>();
     private Stack<Ore> _collectedOres = new Stack<Ore>();
 
@@ -19,20 +17,13 @@ public class OreTracker : MonoBehaviour
     private void OnEnable()
     {
         _drill.Drilled += OnDrilled;
-        _spawner.Created += OnCreated;
         _oreStorage.Decreased += OnDecreased;
     }
 
     private void OnDisable()
     {
         _drill.Drilled -= OnDrilled;
-        _spawner.Created -= OnCreated;
         _oreStorage.Decreased -= OnDecreased;
-    }
-
-    private void OnCreated(Ore ore)
-    {
-        _undrilledOres.Add(ore);
     }
 
     private void OnDecreased()
@@ -49,7 +40,6 @@ public class OreTracker : MonoBehaviour
     private void OnDrilled(Ore ore)
     {
         ore.Collider.isTrigger = false;
-        _undrilledOres.Remove(ore);
         _drilledOres.Push(ore);
 
         _rendererChanger.SetNextState(ore);
