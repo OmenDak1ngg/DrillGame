@@ -8,7 +8,6 @@ public class Ore : MonoBehaviour
 {
     public Durability Durability { get; private set; }
     public Renderer Renderer { get; private set; }
-    public Collider Collider { get; private set; }
     public Rigidbody Rigidbody { get; private set; }
 
     public event Action<Ore> Destroyed;
@@ -27,9 +26,8 @@ public class Ore : MonoBehaviour
     {
         Renderer = GetComponent<Renderer>();
         Rigidbody = GetComponent<Rigidbody>();
-        Collider = GetComponent<BoxCollider>();
         Durability = GetComponent<Durability>();
+        GetComponent<BoxCollider>().isTrigger = false;
         Rigidbody.isKinematic = true;
-        Collider.isTrigger = true;
     }
 }

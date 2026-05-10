@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections;
-using TMPro;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DurabilityDecreaser : MonoBehaviour
@@ -10,7 +10,9 @@ public class DurabilityDecreaser : MonoBehaviour
     [SerializeField] private float _decreaseDelay = 1;
 
     private WaitForSeconds _decreaseWait;
-    private Coroutine _coroutine;
+    private List<Coroutine> _coroutines = new List<Coroutine>();
+
+    private Dictionary<Durability, Coroutine> _decreases = new Dictionary<Durability, Coroutine>();
 
     private void Awake()
     {
@@ -22,25 +24,26 @@ public class DurabilityDecreaser : MonoBehaviour
         while (enabled)
         {
             yield return _decreaseWait;
-            
+
             durability.DecreaseAmount(_decreaseAmount);
         }
     }
 
     public void StartDecrease(Durability durability)
     {
-        if (_coroutine != null)
-            return;
+        Coroutine newCoroutine = _coroutines.FirstOrDefault(coroutine => coroutine == null);
 
-        _coroutine = StartCoroutine(Decrease(durability));
+        newCoroutine = StartCoroutine(Decrease(durability));
+        Debug.Log($"{durability == null}, {newCoroutine == null}");
+        _decreases.Add(durability, newCoroutine);
     }
 
-    public void StopDecrease()
+    public void StopDecrease(Durability durability)
     {
-        if (_coroutine == null)
-            return;
+        Coroutine coroutine = _decreases[durability];
 
-        StopCoroutine(_coroutine);
-        _coroutine = null;
+        StopCoroutine(coroutine);
+        _decreases.Remove(durability);
+        coroutine = null;
     }
 }

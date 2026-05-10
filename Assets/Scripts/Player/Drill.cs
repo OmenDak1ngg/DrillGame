@@ -17,7 +17,7 @@ public class Drill : MonoBehaviour
         _isOreIn = false;
         _collider = GetComponent<Collider>();
         _durabilityDecreaser = GetComponent<DurabilityDecreaser>();
-        _collider.isTrigger = false;
+        _collider.isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,9 +31,9 @@ public class Drill : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<Ore>(out _))
+        if (other.TryGetComponent<Ore>(out Ore ore))
         {
-            _durabilityDecreaser.StopDecrease();
+            _durabilityDecreaser.StopDecrease(ore.Durability);
         }
     }
 }

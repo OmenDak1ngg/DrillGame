@@ -18,7 +18,7 @@ public class OreTracker : MonoBehaviour
 
     private void OnEnable()
     {
-        _spawner.Created += (ore) => _ores.Add(ore);
+        _spawner.Created += OnCreate;
         _oreStorage.Decreased += OnDecreased;
 
         foreach(Ore ore in _ores)
@@ -29,13 +29,19 @@ public class OreTracker : MonoBehaviour
 
     private void OnDisable()
     {
-        _spawner.Created -= (ore) => _ores.Remove(ore); 
+        _spawner.Created -= OnCreate;
         _oreStorage.Decreased -= OnDecreased;
     
         foreach(Ore ore in _ores)
         {
             ore.Destroyed -= OnDrilled;
         }
+    }
+
+    private void OnCreate(Ore ore)
+    {
+        _ores.Add(ore);
+        ore.Destroyed += OnDrilled;
     }
 
     private void OnDecreased()
@@ -51,7 +57,6 @@ public class OreTracker : MonoBehaviour
 
     private void OnDrilled(Ore ore)
     {
-        ore.Collider.isTrigger = false;
         _drilledOres.Push(ore);
 
         _rendererChanger.SetNextState(ore);
