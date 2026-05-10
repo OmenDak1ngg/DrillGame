@@ -57,10 +57,9 @@ public class OreTracker : MonoBehaviour
 
     private void OnDrilled(Ore ore)
     {
+        ore.Collider.isTrigger = true;
         _drilledOres.Push(ore);
-
         _rendererChanger.SetNextState(ore);
-
         _thrower.ThrowTo(ore, _oreStorage.transform.position);
     }
 

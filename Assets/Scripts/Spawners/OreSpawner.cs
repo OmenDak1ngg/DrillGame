@@ -22,6 +22,7 @@ public class OreSpawner : Spawner<Ore>
 
     protected override void OnGet(Ore pooledObject)
     {
+        pooledObject.Collider.isTrigger = false
         pooledObject.Rigidbody.isKinematic = true;
         pooledObject.transform.position = _spawnPosition;
         pooledObject.transform.SetParent(this.transform);

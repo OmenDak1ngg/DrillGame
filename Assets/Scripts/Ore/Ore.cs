@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Build;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -9,6 +10,7 @@ public class Ore : MonoBehaviour
     public Durability Durability { get; private set; }
     public Renderer Renderer { get; private set; }
     public Rigidbody Rigidbody { get; private set; }
+    public Collider Collider { get; private set; }
 
     public event Action<Ore> Destroyed;
 
@@ -27,7 +29,7 @@ public class Ore : MonoBehaviour
         Renderer = GetComponent<Renderer>();
         Rigidbody = GetComponent<Rigidbody>();
         Durability = GetComponent<Durability>();
-        GetComponent<BoxCollider>().isTrigger = false;
+        Collider.isTrigger = false;
         Rigidbody.isKinematic = true;
     }
 }
