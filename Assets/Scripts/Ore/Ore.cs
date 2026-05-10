@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEditor.Build;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -29,6 +28,7 @@ public class Ore : MonoBehaviour
         Renderer = GetComponent<Renderer>();
         Rigidbody = GetComponent<Rigidbody>();
         Durability = GetComponent<Durability>();
+        Collider = GetComponent<Collider>();
         Collider.isTrigger = false;
         Rigidbody.isKinematic = true;
     }

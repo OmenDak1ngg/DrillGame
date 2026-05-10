@@ -34,7 +34,6 @@ public class DurabilityDecreaser : MonoBehaviour
         Coroutine newCoroutine = _coroutines.FirstOrDefault(coroutine => coroutine == null);
 
         newCoroutine = StartCoroutine(Decrease(durability));
-        Debug.Log($"{durability == null}, {newCoroutine == null}");
         _decreases.Add(durability, newCoroutine);
     }
 
