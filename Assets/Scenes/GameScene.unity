@@ -1486,10 +1486,10 @@ MonoBehaviour:
   _levelhandler: {fileID: 122948876}
   _activeColor:
     serializedVersion: 2
-    rgba: 65334
+    rgba: 4278255414
   _inactiveColor:
     serializedVersion: 2
-    rgba: 5933670
+    rgba: 4284123750
 --- !u!1 &578748879
 GameObject:
   m_ObjectHideFlags: 0

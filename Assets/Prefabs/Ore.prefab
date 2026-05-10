@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2190456152272912575}
   - component: {fileID: 5776558358200762065}
   - component: {fileID: 7359910175371122812}
+  - component: {fileID: 3781937585137407009}
   m_Layer: 10
   m_Name: Ore
   m_TagString: Untagged
@@ -146,3 +147,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3781937585137407009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381163291207066651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd250945afae704aabd653c14f70af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _amount: 4

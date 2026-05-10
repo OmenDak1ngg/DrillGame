@@ -1,23 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Durability))]
 public class Ore : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
-    private BoxCollider _collider;
-    private Renderer _renderer;
+    public Durability Durability { get; private set; }
+    public Renderer Renderer { get; private set; }
+    public Collider Collider { get; private set; }
+    public Rigidbody Rigidbody { get; private set; }
 
-    public Renderer Renderer => _renderer;
-    public Collider Collider => _collider;
-    public Rigidbody Rigidbody => _rigidbody;
+    public event Action<Ore> Destroyed;
+
+    private void OnEnable()
+    {
+        Durability.ReachedZero += () => Destroyed?.Invoke(this);
+    }
+
+    private void OnDisable()
+    {
+        Durability.ReachedZero -= () => Destroyed?.Invoke(this);    
+    }
 
     private void Awake()
     {
-        _renderer = GetComponent<Renderer>();
-        _rigidbody = GetComponent<Rigidbody>();
-        _collider = GetComponent<BoxCollider>();
-        _rigidbody.isKinematic = true;
-        _collider.isTrigger = true;
+        Renderer = GetComponent<Renderer>();
+        Rigidbody = GetComponent<Rigidbody>();
+        Collider = GetComponent<BoxCollider>();
+        Durability = GetComponent<Durability>();
+        Rigidbody.isKinematic = true;
+        Collider.isTrigger = true;
     }
 }
