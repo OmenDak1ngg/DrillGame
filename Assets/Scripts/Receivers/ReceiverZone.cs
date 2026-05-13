@@ -8,7 +8,7 @@ public class ReceiverZone : MonoBehaviour
 
     private bool _isPlayerEntered;
 
-    public event Action<Player> PlayerEntered;
+    public event Action PlayerEntered;
     public event Action PlayerExited;
 
     private void Awake()
@@ -25,7 +25,7 @@ public class ReceiverZone : MonoBehaviour
                 return;
 
             _isPlayerEntered = true;
-            PlayerEntered?.Invoke(player);
+            PlayerEntered?.Invoke();
         }
     }
 

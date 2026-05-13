@@ -1,17 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class ResourceReceiver : MonoBehaviour
+public class OreReceiver : MonoBehaviour
 {
-    [SerializeField] private int _resourceCost = 3;
     [SerializeField] private float _decreasingDelay = 0.5f;
 
     [SerializeField] private ReceiverZone _receiverZone;
     [SerializeField] private OreTracker _oreTracker;
+    [SerializeField] private OreStorage _oreStorage;
 
     private WaitForSeconds _decreasingWait;
     private Coroutine _coroutine;
+
+    public event Action Received;
 
     private void OnEnable()
     {
@@ -38,12 +41,12 @@ public class ResourceReceiver : MonoBehaviour
         StopCoroutine(_coroutine);
     }
 
-    private void StartDecreasingResource(Player player)
+    private void StartDecreasingResource()
     {
-        _coroutine = StartCoroutine(DecreaseResource(player));
+        _coroutine = StartCoroutine(DecreaseResource());
     }
 
-    private IEnumerator DecreaseResource(Player player)
+    private IEnumerator DecreaseResource()
     {
         while (enabled)
         {
@@ -53,8 +56,8 @@ public class ResourceReceiver : MonoBehaviour
                 yield break;
             }
 
-            player.OreStorage.TryDecreaseAmount();
-            player.Wallet.IncreaseAmount(_resourceCost);
+            _oreStorage.TryDecreaseAmount();
+            Received?.Invoke(); 
 
             yield return _decreasingWait;
         }

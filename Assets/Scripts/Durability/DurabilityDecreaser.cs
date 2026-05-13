@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -44,5 +45,13 @@ public class DurabilityDecreaser : MonoBehaviour
         StopCoroutine(coroutine);
         _decreases.Remove(durability);
         coroutine = null;
+    }
+
+    public void IncreaseAmount(int amount)
+    {
+        if(amount < 0)
+            throw new ArgumentOutOfRangeException(nameof(amount));
+
+        _decreaseAmount += amount;
     }
 }
