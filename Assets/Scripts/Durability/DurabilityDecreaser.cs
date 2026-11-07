@@ -10,10 +10,24 @@ public class DurabilityDecreaser : MonoBehaviour
 
     [SerializeField] private float _decreaseDelay = 1;
 
+    private float _minDecreaseDelay = 0.1f;
+    
     private WaitForSeconds _decreaseWait;
     private List<Coroutine> _coroutines = new List<Coroutine>();
 
     private Dictionary<Durability, Coroutine> _decreases = new Dictionary<Durability, Coroutine>();
+
+    private void OnDisable()
+    {
+        foreach(Durability durability in _decreases.Keys)
+        {
+            if(_decreases[durability] != null)
+            {
+                StopCoroutine(_decreases[durability]);
+                _decreases.Remove(durability);
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -47,11 +61,16 @@ public class DurabilityDecreaser : MonoBehaviour
         coroutine = null;
     }
 
-    public void IncreaseAmount(int amount)
+    public void IncreaseDurability(int amount)
     {
         if(amount < 0)
             throw new ArgumentOutOfRangeException(nameof(amount));
 
         _decreaseAmount += amount;
+    }
+
+    public void DecreaseDelay(float amount)
+    {
+        _decreaseDelay = Mathf.Max(_decreaseDelay - amount, _minDecreaseDelay);
     }
 }

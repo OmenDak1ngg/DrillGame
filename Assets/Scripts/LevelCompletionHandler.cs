@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class LevelCompletionHandler : MonoBehaviour
 {
     [SerializeField] private List<int> _scoreGoals;
     [SerializeField] private Wallet _playerWallet;
+
+    public int LastGettedGoalIndex { get; private set; }
 
     public int MaxScore => _scoreGoals.Max();
     public List<int> ScoreGoals => _scoreGoals;
@@ -17,6 +20,7 @@ public class LevelCompletionHandler : MonoBehaviour
     private void Awake()
     {
         _scoreGoals.Sort();
+        LastGettedGoalIndex = 0;
     }
 
     private void OnEnable()
@@ -32,16 +36,19 @@ public class LevelCompletionHandler : MonoBehaviour
     private void OnWalletUpdate(int value)
     {
         ReachedScore.Invoke(value);
-        
-        foreach(int  score in _scoreGoals)
+
+        for(int i = _scoreGoals.Count - 1; i >= 0; i--)
         {
-            if(value >= score)
+            int score = _scoreGoals[i];
+
+            if (value >= score)
             {
                 ReachedAnyGoal?.Invoke();
-                
+                LastGettedGoalIndex = _scoreGoals.IndexOf(score);
+                Debug.Log($"{LastGettedGoalIndex} {score}");
+
                 return;
             }
         }
-
     }
 }

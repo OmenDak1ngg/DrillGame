@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OreTracker : MonoBehaviour
 {
-    [SerializeField] private OreSpawner _spawner;
+    [SerializeField] private OreSpawner[] _spawners;
     [SerializeField] private OreRendererChanger _rendererChanger;
     [SerializeField] private Thrower _thrower;
     [SerializeField] private OreStorage _oreStorage;
@@ -12,16 +12,20 @@ public class OreTracker : MonoBehaviour
     private Stack<Ore> _drilledOres = new Stack<Ore>();
     private Stack<Ore> _collectedOres = new Stack<Ore>();
 
-    private List<Ore> _ores  = new List<Ore>();
+    private List<Ore> _ores = new List<Ore>();
 
     public event Action<int> CountUpdated;
 
     private void OnEnable()
     {
-        _spawner.Created += OnCreate;
+        foreach (OreSpawner spawner in _spawners)
+        {
+            spawner.Created += OnCreate;
+        }
+
         _oreStorage.Decreased += OnDecreased;
 
-        foreach(Ore ore in _ores)
+        foreach (Ore ore in _ores)
         {
             ore.Destroyed += OnDrilled;
         }
@@ -29,10 +33,14 @@ public class OreTracker : MonoBehaviour
 
     private void OnDisable()
     {
-        _spawner.Created -= OnCreate;
+        foreach (OreSpawner spawner in _spawners)
+        {
+            spawner.Created -= OnCreate;
+        }
+
         _oreStorage.Decreased -= OnDecreased;
-    
-        foreach(Ore ore in _ores)
+
+        foreach (Ore ore in _ores)
         {
             ore.Destroyed -= OnDrilled;
         }
@@ -81,5 +89,15 @@ public class OreTracker : MonoBehaviour
     public bool HasCollectedOres()
     {
         return _collectedOres.Count > 0;
+    }
+
+    public Ore PeekLastCollected()
+    {
+        return _collectedOres.Peek();
+    }
+
+    public bool IsCollected(Ore ore)
+    {
+        return _collectedOres.Contains(ore);
     }
 }

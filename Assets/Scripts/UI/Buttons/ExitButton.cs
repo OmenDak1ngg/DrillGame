@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ExitButton : MenuButton
+public class ExitButton : UIButton
 {
     [SerializeField] private Image _closableImage;
 

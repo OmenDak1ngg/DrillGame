@@ -53,13 +53,18 @@ public class PlayerMover : MonoBehaviour
 
     private void HandleGravity()
     {
-        if (_characterController.isGrounded == false)
+        if (_characterController.isGrounded && _currentGravityForce < 0f)
         {
-            _currentGravityForce = _gravityForce * _gravityForceModifier * Time.deltaTime;
-            _characterController.Move(Vector3.up * _currentGravityForce);
-
+            _currentGravityForce = -2f;
         }
         else
-            _currentGravityForce = 0f;
+        {
+            _currentGravityForce +=
+                _gravityForce * _gravityForceModifier * Time.deltaTime;
+        }
+
+        _characterController.Move(
+            Vector3.up * _currentGravityForce * Time.deltaTime
+        );
     }
 }

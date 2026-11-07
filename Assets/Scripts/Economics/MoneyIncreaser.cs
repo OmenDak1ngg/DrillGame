@@ -4,7 +4,6 @@ using UnityEngine;
 public class MoneyIncreaser : MonoBehaviour
 {
     [SerializeField] private Wallet _wallet;
-    [SerializeField] private int _increaseByOre = 3;
 
     private OreReceiver _receiver;
  
@@ -23,9 +22,8 @@ public class MoneyIncreaser : MonoBehaviour
         _receiver = GetComponent<OreReceiver>();
     }
 
-    private void IncreaseMoney()
+    private void IncreaseMoney(int amount)
     {
-        Debug.Log("деньги увел");
-        _wallet.IncreaseAmount(_increaseByOre);
+        _wallet.IncreaseAmount(amount);
     }
 }

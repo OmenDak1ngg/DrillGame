@@ -1,43 +1,47 @@
+﻿using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(OreReceiver))]
+
 public class DrillUpgrader : MonoBehaviour
 {
     [SerializeField] private DurabilityDecreaser _durabilityDecreaser;
 
     [SerializeField] private int _upgradeCost = 10;
-    [SerializeField] private int _upgradeAmount = 1;
 
-    private OreReceiver _receiver;
+    private MoneyReceiver _receiver;
+    private int _collectedMoney;
 
-    private int _oreCount;
+    protected bool CanUpgrade;
+    protected DurabilityDecreaser DurabilityDecreaser => _durabilityDecreaser;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
-        _receiver.Received += UpgradeDecreaser;
+        _receiver.Received += OnReceived;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
-        _receiver.Received -= UpgradeDecreaser;
+        _receiver.Received -= OnReceived;
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        _oreCount = 0;
-        _receiver = GetComponent<OreReceiver>();
+        _collectedMoney = 0;
+        _receiver = GetComponent<MoneyReceiver>();
     }
 
-    private void UpgradeDecreaser()
+    protected virtual void OnReceived()
     {
-        _oreCount++;
+        _collectedMoney++;
 
-        if(_oreCount == _upgradeCost)
+        if (_collectedMoney < _upgradeCost)
         {
-            Debug.Log("Upgraded");
-            _durabilityDecreaser.IncreaseAmount(_upgradeAmount);
-
-            _oreCount %= _upgradeCost;
+            CanUpgrade = false;
+            return;
         }
+
+        CanUpgrade = true;
+
+        _collectedMoney %= _upgradeCost;
     }
 }
