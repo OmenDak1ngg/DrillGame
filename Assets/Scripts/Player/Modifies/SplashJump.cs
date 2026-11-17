@@ -17,7 +17,7 @@ public class SplashJump : Modify
     protected override void Use()
     {
         var ores = Physics.OverlapSphere(transform.position, _splashRadius, _layerMask);
-        Debug.Log("used");
+
         if(ores.Length != 0)
         {
             foreach(var ore in ores)

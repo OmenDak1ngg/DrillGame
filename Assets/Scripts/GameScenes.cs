@@ -7,5 +7,6 @@ public enum GameScenes
     MainMenu,
     MapScene,
     FirstLevel,
-    SecondLevel
+    SecondLevel,
+    FirstLevel1
 }

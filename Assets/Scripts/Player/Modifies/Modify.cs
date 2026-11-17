@@ -6,11 +6,14 @@ using UnityEngine;
 public abstract class Modify : MonoBehaviour
 {
     [SerializeField] private float _cooldown;
+    [SerializeField] private ModifyTypes _type;
 
     private WaitForSeconds _cooldownWait;
     private bool _cauUse;
 
     protected KeyCode _key;
+
+    public ModifyTypes Type => _type;
 
     public event Action ModifyActived;
 
@@ -24,7 +27,6 @@ public abstract class Modify : MonoBehaviour
     {
         if (_cauUse && Input.GetKeyDown(_key))
         {
-            Debug.Log("used");
             Use();
             _cauUse = false;
             ModifyActived?.Invoke();
